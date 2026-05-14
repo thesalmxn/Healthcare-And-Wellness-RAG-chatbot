@@ -2,38 +2,64 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import RunnableLambda
 from langchain_core.output_parsers import StrOutputParser
 from deep_translator import GoogleTranslator
+from langdetect import detect  
 import sys, os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from src.retrieval.retriever import load_retriever
 from src.llm.model import load_llm
-from src.ingest.translator import is_greek
 
+# Stronger multilingual prompt
 ANSWER_PROMPT = """
-You are a knowledgeable herbal assistant.
+You are a knowledgeable herbal medicine expert.
 Use ONLY the context below to answer the question.
-Be specific and direct.
-If the answer is not in the context, say: "I don't have information on that in my current knowledge base. Please consult a specialist."
 
 Context:
 {context}
 
-Question asked in {language}: {question}
+Question: {question}
 
-IMPORTANT: Your response must be written entirely in {language}. Do not use any other language.
+CRITICAL LANGUAGE INSTRUCTION:
+The question was asked in {language}.
+You MUST respond ENTIRELY in {language}.
+Do NOT mix languages.
+Every word of your answer must be in {language}.
 
-Answer in {language}:
+If the context doesn't contain the answer, say in {language}: "I don't have that information."
+
+Your complete answer in {language}:
 """
 
-def format_docs(docs):
-    return "\n\n".join(doc.page_content for doc in docs)
-
-def translate_to_greek(text):
+def detect_language(text):
+    """Detect input language"""
     try:
-        return GoogleTranslator(source='en', target='el').translate(text)
+        lang_code = detect(text)
+        
+        # Map language codes to names
+        lang_map = {
+            'el': 'Greek',
+            'en': 'English', 
+            'pl': 'Polish',
+            'sl': 'Slovenian',
+            'es': 'Spanish',
+            'de': 'German',
+            'fr': 'French',
+            'it': 'Italian',
+            'tr': 'Turkish',
+            'ar': 'Arabic',
+            'hi': 'Hindi',
+            'ru': 'Russian',
+        }
+        
+        language_name = lang_map.get(lang_code, 'English')
+        return language_name, lang_code
     except:
-        return text
+        return 'English', 'en'
+
+def format_docs(docs):
+    """Format retrieved documents"""
+    return "\n\n".join(doc.page_content for doc in docs)
 
 def build_chain():
     prompt = PromptTemplate(
@@ -44,37 +70,48 @@ def build_chain():
     llm = load_llm()
 
     def pipeline(question):
-        # Detect original language
-        if is_greek(question):
-            language = "Greek"
-            # Translate Greek question to English for retrieval
-            english_question = GoogleTranslator(source='el', target='en').translate(question)
+        # 1. Detect original language
+        language_name, lang_code = detect_language(question)
+        
+        # 2. Translate to English for retrieval (if needed)
+        if lang_code != 'en':
+            try:
+                english_question = GoogleTranslator(
+                    source=lang_code, 
+                    target='en'
+                ).translate(question)
+            except Exception as e:
+                print(f"Translation error: {e}")
+                english_question = question
         else:
-            language = "English"
             english_question = question
-
-        # Search English index with English query
+        
+        # 3. Retrieve documents using English query
         docs = retriever.invoke(english_question)
         context = format_docs(docs)
-
-        # Answer in original language
-        return (prompt | llm | StrOutputParser()).invoke({
+        
+        # 4. Generate answer in original language
+        answer = (prompt | llm | StrOutputParser()).invoke({
             "context": context,
             "question": question,
-            "language": language
+            "language": language_name
         })
+        
+        return answer
 
     return RunnableLambda(pipeline)
 
 def chat():
     print("Herbal Assistant ready. Type 'exit' to quit.\n")
     chain = build_chain()
+    
     while True:
         question = input("You: ").strip()
         if question.lower() == "exit":
             break
         if not question:
             continue
+        
         answer = chain.invoke(question)
         print(f"\nAssistant: {answer}\n")
 
