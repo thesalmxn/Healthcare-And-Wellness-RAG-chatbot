@@ -83,8 +83,8 @@ def show_next_steps():
    streamlit run app.py
    
    Try queries like:
-   - "Τι βότανα βοηθούν στον ύπνο;" (Greek)
-   - "What herbs help with sleep?" (English)
+   - "Τι βοηθάει τον ύπνο;" (Greek)
+   - "What wellness practices help with sleep?" (English)
    
 3. IF TEST WORKS WELL, RUN FULL BUILD (~2-3 hours):
    python src/ingest/build_index.py
@@ -94,7 +94,7 @@ def show_next_steps():
 
 if __name__ == "__main__":
     print("="*70)
-    print("🌿 HERBAL RAG - PRE-FLIGHT CHECK")
+    print("🌿 HEALTH & WELLNESS RAG - PRE-FLIGHT CHECK")
     print("="*70)
     print()
     

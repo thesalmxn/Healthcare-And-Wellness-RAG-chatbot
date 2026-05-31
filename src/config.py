@@ -11,7 +11,8 @@ VECTOR_STORE_DIR = BASE_DIR / "vector_store"
 # ── Ollama model settings ───────────────────────────────────────────────────
 LLM_MODEL       = "llama3.1:8b"
 EMBEDDING_MODEL = "nomic-embed-text"
+OLLAMA_BASE_URL = "http://192.168.10.7:11434"
 
 # ── Text splitting settings ─────────────────────────────────────────────────
-CHUNK_SIZE    = 1200
-CHUNK_OVERLAP = 100
+CHUNK_SIZE    = 1500
+CHUNK_OVERLAP = 200

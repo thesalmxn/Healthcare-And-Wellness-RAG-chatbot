@@ -12,7 +12,7 @@ from src.llm.model import load_llm
 
 # Stronger multilingual prompt
 ANSWER_PROMPT = """
-You are a knowledgeable herbal medicine expert.
+You are a knowledgeable health and wellness expert.
 Use ONLY the context below to answer the question.
 
 Context:
@@ -102,7 +102,7 @@ def build_chain():
     return RunnableLambda(pipeline)
 
 def chat():
-    print("Herbal Assistant ready. Type 'exit' to quit.\n")
+    print("Health & Wellness Assistant ready. Type 'exit' to quit.\n")
     chain = build_chain()
     
     while True:

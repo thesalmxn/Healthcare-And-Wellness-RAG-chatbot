@@ -7,7 +7,7 @@ from src.chat.chat import build_chain
 
 # ── Page config ────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Herbal Assistant",
+    page_title="Health & Wellness Assistant",
     page_icon="🌿",
     layout="centered"
 )
@@ -31,20 +31,20 @@ with st.sidebar:
     
     with st.expander("🇬🇷 Greek Examples"):
         st.markdown("""
-        - Τι βότανα βοηθούν στον ύπνο;
-        - Πώς χρησιμοποιώ το χαμομήλι;
-        - Ποιες είναι οι ιδιότητες της μέντας;
-        - Τι βότανα βοηθούν με το άγχος;
-        - Λεβάντα ιδιότητες
+        - Τι βοηθάει τον ύπνο;
+        - Πώς μπορώ να μειώσω το άγχος;
+        - Ποιες συνήθειες βελτιώνουν την πέψη;
+        - Πώς να ενισχύσω την ενέργειά μου;
+        - Ποια είναι τα οφέλη της χαλάρωσης;
         """)
     
     with st.expander("🇬🇧 English Examples"):
         st.markdown("""
-        - What herbs help with anxiety?
-        - Which herbs are good for digestion?
-        - How do I use chamomile?
-        - What are the properties of mint?
-        - Lavender uses
+        - What wellness practices help with stress?
+        - Which habits improve digestion?
+        - How do I improve sleep quality?
+        - What are the benefits of mindful breathing?
+        - How can I support immune health?
         """)
     
     st.divider()
@@ -52,9 +52,9 @@ with st.sidebar:
     # About section
     st.subheader("ℹ️ About")
     st.caption("""
-    This chatbot provides information about Greek herbal medicine 
+    This chatbot provides information about Greek health and wellness topics 
     based on 350+ documents. Always consult a healthcare professional 
-    before using herbs medicinally.
+    before acting on health advice.
     """)
     
     # Clear chat button
@@ -63,8 +63,8 @@ with st.sidebar:
         st.rerun()
 
 # ── Header ─────────────────────────────────────────────────────────────────
-st.title("🌿 Herbal Assistant")
-st.caption("Ask me anything about herbal remedies, dosages, and properties.")
+st.title("🌿 Health & Wellness Assistant")
+st.caption("Ask me anything about health & wellness remedies and advices.")
 st.divider()
 
 # ── Load chain once and cache it ───────────────────────────────────────────
@@ -84,7 +84,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # ── Chat input ─────────────────────────────────────────────────────────────
-if question := st.chat_input("Ask about herbs..."):
+if question := st.chat_input("Ask about health & wellness..."):
 
     # Show user message
     st.session_state.messages.append({"role": "user", "content": question})
@@ -110,4 +110,4 @@ if question := st.chat_input("Ask about herbs..."):
 
 # ── Footer ─────────────────────────────────────────────────────────────────
 st.divider()
-st.caption("⚠️ This chatbot provides educational information only. Always consult a healthcare professional before using herbs medicinally.")
+st.caption("⚠️ This chatbot provides educational information only. Always consult a healthcare professional before acting on health advice.")

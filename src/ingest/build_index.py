@@ -87,7 +87,7 @@ def load_documents():
  
 def build_index(test_mode=False):
     print("=" * 70)
-    print("🌿 HERBAL RAG - INDEX BUILDER")
+    print("🌿 HEALTH & WELLNESS RAG - INDEX BUILDER")
     print("=" * 70)
     
     print("\n📂 Loading documents...")
@@ -176,7 +176,7 @@ def build_index(test_mode=False):
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(
-        description="Build FAISS index with English translation for Greek herbal documents"
+        description="Build FAISS index with English translation for Greek health and wellness documents"
     )
     parser.add_argument(
         "--test", 
