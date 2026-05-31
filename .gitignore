@@ -2,6 +2,8 @@
 __pycache__/
 *.py[codz]
 *$py.class
+*.pyc
+*.pyo
 
 
 
@@ -195,6 +197,26 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Project-specific ignores
+.env
+.envrc
+.venv/
+venv/
+*.log
+*.sqlite3
+*.sqlite
+*.db
+vector_store/
+data/raw_pdfs/
+*.pem
+*.key
+*.crt
+*.secret
+secrets.json
+.ipynb_checkpoints
+.vscode/
+.idea/
 
 # Cursor
 #  Cursor is an AI-powered code editor. `.cursorignore` specifies files/directories to
